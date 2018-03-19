@@ -27,25 +27,21 @@ contract Vault is VaultBase {
 
     event NewTokenStandard(uint32 indexed erc, uint32 indexed interfaceDetectionERC, bytes4 indexed interfaceID, address connector);
 
-    function Vault() {
+    function Vault() public {
         erc20ConnectorBase = new ERC20Connector();
         ethConnectorBase = new ETHConnector();
     }
 
-    function initializeEmpty() onlyInit public {
+    function initialize(ERC20Connector erc20Connector, ETHConnector ethConnector) onlyInit public {
         initialized();
 
         supportedInterfaceDetectionERCs[NO_DETECTION] = true;
         supportedInterfaceDetectionERCs[ERC165] = true;
-    }
-
-    function initialize(ERC20Connector erc20Connector, ETHConnector ethConnector) onlyInit public {
-        initializeEmpty();
 
         _setConnectors(erc20Connector, ethConnector);
     }
 
-    function initializeWithBase(Vault baseVault) onlyInit {
+    function initializeWithBase(Vault baseVault) onlyInit public {
         initialize(baseVault.erc20ConnectorBase(), baseVault.ethConnectorBase());
     }
 
